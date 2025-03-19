@@ -1,0 +1,117 @@
+|*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.login{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(231, 229, 229);
+    box-shadow: 1px;
+}
+
+.login_form_input{
+    padding: 5px;
+    outline: none;
+    border: 1px solid black;
+    margin: 20px 20px 0px 20px;
+}
+
+.login_form_submit{
+    margin-top: 50px;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.home{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.home_chat{
+    width: 100%;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.home_message_form{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.message.disconnected_user{
+    background-color: rgb(207, 207, 207);
+    margin-top: 10px;
+}
+.message.new_user{
+    background-color: rgb(207, 207, 207);
+    margin-top: 10px;
+}
+
+.message.new_user.messagep{
+    padding: 5px;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.message.disconnected_user.messagep{
+    padding: 5px;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.message.server_message{
+    margin-right: auto;
+    background-color: rgb(207, 207, 207);
+    margin-top: 10px;
+    max-width: 300px;
+    margin-left: 5px;
+}
+
+.message.server_message.usernamep{
+    padding: 5px;
+    margin: 0px;
+}
+.message.server_message.messagep{
+    padding: 5px;
+    margin: 0px;
+    word-break: break-all;
+    color: rgb(53, 53, 53);
+}
+
+.message.user_message{
+    margin-left: auto;
+    background-color: rgb(207, 207, 207);
+    margin-top: 10px;
+    max-width: 300px;
+    margin-right: 5px;
+}
+
+.message.user_message.usernamep{
+    padding: 5px;
+    margin: 0px;
+}
+.message.user_message.messagep{
+    padding: 5px;
+    margin: 0px;
+    word-break: break-all;
+    color: rgb(53, 53, 53);
+}
