@@ -50,64 +50,94 @@
     overflow-x: hidden;
 }
 
-.message.disconnected_user{
+.disconnected_user{
     background-color: rgb(207, 207, 207);
     margin-top: 10px;
 }
-.message.new_user{
+.new_user{
     background-color: rgb(207, 207, 207);
     margin-top: 10px;
 }
 
-.message.new_user.messagep{
+.new_user_message{
     padding: 5px;
-    font-size: 12px;
+    font-size: 11px;
     margin: 0px;
 }
 
-.message.disconnected_user.messagep{
+.disconnected_user_message{
     padding: 5px;
-    font-size: 12px;
+    font-size: 11px;
     margin: 0px;
 }
 
-.message.server_message{
+
+
+.server_message{
     margin-right: auto;
     background-color: rgb(207, 207, 207);
     margin-top: 10px;
     max-width: 300px;
     margin-left: 5px;
     min-width: 150px;
+    display: flex;
+    align-items: flex-end;
 }
 
-.message.server_message.usernamep{
+.server_message_div{
+    width: 80%;
+}
+.server_message_username{
     padding: 5px;
     margin: 0px;
+    font-size: 12px;
+    color: rgb(53, 53, 53);
 }
-.message.server_message.messagep{
+.server_message_message{
     padding: 5px;
     margin: 0px;
     word-break: break-all;
+}
+.server_message_date{
+    margin: 0px;
+    width: 20%;
+    text-align: end;
+    padding: 0px 5px 5px 0px;
+    font-size: 12px;
     color: rgb(53, 53, 53);
 }
 
-.message.user_message{
+.user_message_div{
+    width: 80%;
+}
+.user_message{
     margin-left: auto;
     background-color: rgb(207, 207, 207);
     margin-top: 10px;
     max-width: 300px;
     margin-right: 5px;
     min-width: 150px;
+    display: flex;
+    align-items: flex-end;
 }
 
-.message.user_message.usernamep{
+.user_message_username{
     padding: 5px;
     margin: 0px;
+    color: rgb(53, 53, 53);
+    font-size: 12px;
 }
-.message.user_message.messagep{
+.user_message_message{
     padding: 5px;
     margin: 0px;
     word-break: break-all;
+}
+.user_message_date{
+    margin: 0px;
+    width: 20%;
+    text-align: end;
+    padding: 0px 5px 5px 0px;
+    font-size: 12px;
     color: rgb(53, 53, 53);
 }
 
@@ -120,14 +150,17 @@
 }
 
 .home_message_form_input{
+    width: calc(80% - 30px);
     height: 40px;
     margin-left: 10px;
     outline: none;
     border-radius: 0px;
     border: 1px solid black;
+    margin-right: 10px;
 }
 
 .home_message_form_submit{
+    width: 20%;
     height: 50px;
     margin-right: 10px;
     cursor: pointer;

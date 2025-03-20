@@ -8,6 +8,7 @@ type Message = {
     username: string
     message: string
     type: string
+    date: Date
 }
 
 function Home(){
@@ -19,14 +20,14 @@ function Home(){
 
     useEffect(() => {
         socket.on("new_user", (username) => {
-            setMessages([...messages, { username: "server", message: username + " acaba de entrar na conversa", type: "new_user"}])
+            setMessages([...messages, { username: "server", message: username + " acaba de entrar na conversa", type: "new_user", date: new Date()}])
         })
         socket.on("disconnected_user", (username) => {
-            setMessages([...messages, { username: "server", message: username + " saiu da conversa", type: "disconnected_user"}])
+            setMessages([...messages, { username: "server", message: username + " saiu da conversa", type: "disconnected_user", date: new Date()}])
         })
 
         socket.on("server_message", (data) => {
-            setMessages([...messages, { username: data.username, message: data.message, type: "server_message"}])
+            setMessages([...messages, { username: data.username, message: data.message, type: "server_message", date: data.date}])
         })
 
         socket.once("last_messages", (data: Message[]) => {
@@ -56,7 +57,7 @@ function Home(){
     }
 
     async function onMessageSubmit(data: IFormInputMessage){
-        setMessages([...messages, { username: user!.username, message: data.message, type: "user_message"}])
+        setMessages([...messages, { username: user!.username, message: data.message, type: "user_message", date: new Date()}])
         socket.emit("client_message", { message: data.message, username: user!.username })
 
         messagereset()
@@ -95,17 +96,27 @@ function Home(){
                         <div className="home_chat">
                             {
                                 messages.map(message => {
+                                    if (new Date().getDay() - new Date(message.date).getDay() > 0){
+                                        <div className={"day"}>
+                                            <p className={"day_messagep"}>{new Date(message.date).getDay() + "/" + new Date(message.date).getMonth() + "/" + new Date(message.date).getFullYear()}</p>
+                                        </div>
+                                    }
                                     if (message.type == "server_message" || message.type == "user_message"){
                                         return (
-                                            <div className={"message " + message.type}>
-                                                <p className={"message " + message.type + " usernamep"}>{message.username}</p>
-                                                <p className={"message " + message.type + " messagep"}>{message.message}</p>
+                                            <div className={message.type}>
+                                                <div className={message.type + "_div"}>
+                                                    <p className={message.type + "_username"}>{message.username}</p>
+                                                    <p className={message.type + "_message"}>{message.message}</p>
+                                                </div>
+                                                <p className={message.type + "_date"}>{
+                                                    new Date(message.date).getHours() + ":" + new Date(message.date).getMinutes()
+                                                }</p>
                                             </div>
                                         )
                                     } else {
                                         return (
-                                            <div className={"message " + message.type}>
-                                                <p className={"message " + message.type + " messagep"}>{message.message}</p>
+                                            <div className={message.type}>
+                                                <p className={message.type + "_message"}>{message.message}</p>
                                             </div>
                                         )
                                     }
