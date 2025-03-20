@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { createRef, useContext, useEffect, useRef, useState } from "react"
 import { IFormInputLogin, IFormInputMessage, UserContext } from "../context/userContext"
 import { useForm } from "react-hook-form"
 import "./Home.css"
@@ -13,22 +13,23 @@ type Message = {
 function Home(){
     const { user, LoginSubmit, Logout } = useContext(UserContext)
     const [ messages, setMessages ] = useState<Message[]>([])
-    const { register: loginregister, handleSubmit: loginhandlesubmit, formState: { errors : loginerrors } } = useForm<IFormInputLogin>()
-    const { register: messageregister, handleSubmit: messagehandlesubmit, formState: { errors : messageerrors } } = useForm<IFormInputMessage>()
+    const { register: loginregister, handleSubmit: loginhandlesubmit, formState: { errors : loginerrors }, reset: loginreset } = useForm<IFormInputLogin>()
+    const { register: messageregister, handleSubmit: messagehandlesubmit, formState: { errors : messageerrors }, reset: messagereset } = useForm<IFormInputMessage>()
+    const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
     useEffect(() => {
-        socket.on("new_user", (data) => {
-            setMessages([...messages, { username: "server", message: data.username + " acaba de entrar na conversa", type: "new_user"}])
+        socket.on("new_user", (username) => {
+            setMessages([...messages, { username: "server", message: username + " acaba de entrar na conversa", type: "new_user"}])
         })
-        socket.on("disconnected_user", (data) => {
-            setMessages([...messages, { username: "server", message: data.username + " saiu da conversa", type: "disconnected_user"}])
+        socket.on("disconnected_user", (username) => {
+            setMessages([...messages, { username: "server", message: username + " saiu da conversa", type: "disconnected_user"}])
         })
 
         socket.on("server_message", (data) => {
             setMessages([...messages, { username: data.username, message: data.message, type: "server_message"}])
         })
 
-        socket.on("last_messages", (data: Message[]) => {
+        socket.once("last_messages", (data: Message[]) => {
             console.log(data)
             setMessages([...messages, ...data])
         })
@@ -37,6 +38,7 @@ function Home(){
             socket.off("new_user")
             socket.off("disconnected_user")
             socket.off("server_message")
+            socket.off("last_messages")
         };
         
     }, [socket, messages])
@@ -48,18 +50,26 @@ function Home(){
             return
         }
 
+        loginreset()
+
         socket.connect()
     }
 
     async function onMessageSubmit(data: IFormInputMessage){
         setMessages([...messages, { username: user!.username, message: data.message, type: "user_message"}])
         socket.emit("client_message", { message: data.message, username: user!.username })
+
+        messagereset()
     }
 
     window.onbeforeunload = () => {
         socket.disconnect()
         Logout()
     }
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+      }, [messages]);
 
     return (
         <>
@@ -101,10 +111,11 @@ function Home(){
                                     }
                                 })
                             }
+                            <div ref={messagesEndRef} />
                         </div>
                         <form className="home_message_form" onSubmit={messagehandlesubmit(onMessageSubmit)}>
-                            <input className="message_form_input" placeholder="Message" {...messageregister("message", { required: true, maxLength: 500})} aria-invalid={messageerrors.message ? "true" : "false"}/>
-                            <input className="message_form_submit" type="submit" placeholder="Send"/>
+                            <input className="home_message_form_input" placeholder="Message" {...messageregister("message", { required: true, maxLength: 500})} aria-invalid={messageerrors.message ? "true" : "false"}/>
+                            <input className="home_message_form_submit" type="submit" placeholder="Send"/>
                         </form>
                     </div>
             }
